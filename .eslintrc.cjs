@@ -3,11 +3,7 @@ require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
-  extends: [
-    'plugin:vue/vue3-essential',
-    'eslint:recommended',
-    '@vue/eslint-config-prettier',
-  ],
+  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/eslint-config-prettier'],
   env: {
     'vue/setup-compiler-macros': true,
   },
@@ -19,16 +15,19 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
-        useTabs: false,
-        usePrettierrc: false,
-        singleQuote: true,
+        arrowParens: 'always',
+        bracketSpacing: true,
+        endOfLine: 'auto',
+        htmlWhitespaceSensitivity: 'css',
+        jsxBracketSameLine: false,
+        jsxSingleQuote: true,
+        proseWrap: 'preserve',
+        quoteProps: 'as-needed',
+        printWidth: 100,
         semi: true,
+        singleQuote: true,
         tabWidth: 2,
         trailingComma: 'all',
-        printWidth: 80,
-        bracketSpacing: true,
-        arrowParens: 'avoid',
-        endOfLine: 'auto',
       },
     ],
   },
