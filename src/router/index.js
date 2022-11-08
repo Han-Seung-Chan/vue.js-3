@@ -1,18 +1,46 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import AboutViewVue from '@/views/AboutView.vue';
-import HomeViewVue from '@/views/HomeView.vue';
-import PostListViewVue from '@/views/posts/PostListView.vue';
-import PostCreateViewVue from '@/views/posts/PostCreateView.vue';
-import PostDetailViewVue from '@/views/posts/PostDetailView.vue';
-import PostEditViewVue from '@/views/posts/PostEditView.vue';
+import AboutView from '@/views/AboutView.vue';
+import HomeView from '@/views/HomeView.vue';
+import PostListView from '@/views/posts/PostListView.vue';
+import PostCreateView from '@/views/posts/PostCreateView.vue';
+import PostDetailView from '@/views/posts/PostDetailView.vue';
+import PostEditView from '@/views/posts/PostEditView.vue';
+import NotFoundView from '@/views/NotFoundView.vue';
+import NestedView from '@/views/nested/NestedView.vue';
+import NestedHomeView from '@/views/nested/NestedHomeView.vue';
+import NestedOneView from '@/views/nested/NestedOneView.vue';
+import NestedTwoView from '@/views/nested/NestedTwoView.vue';
 
 const routes = [
-  { path: '/', name: 'Home', component: HomeViewVue },
-  { path: '/about', name: 'About', component: AboutViewVue },
-  { path: '/posts', name: 'PostList', component: PostListViewVue },
-  { path: '/posts/create', name: 'PostCreate', component: PostCreateViewVue },
-  { path: '/posts/:id', name: 'PostDetail', component: PostDetailViewVue },
-  { path: '/posts/edit/:id', name: 'PostEdit', component: PostEditViewVue },
+  { path: '/', name: 'Home', component: HomeView },
+  { path: '/about', name: 'About', component: AboutView },
+  { path: '/posts', name: 'PostList', component: PostListView },
+  { path: '/posts/create', name: 'PostCreate', component: PostCreateView },
+  { path: '/posts/:id', name: 'PostDetail', component: PostDetailView },
+  { path: '/posts/edit/:id', name: 'PostEdit', component: PostEditView },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundView },
+  {
+    path: '/nested',
+    name: 'Nested',
+    component: NestedView,
+    children: [
+      {
+        path: '',
+        name: 'NestedHome',
+        component: NestedHomeView,
+      },
+      {
+        path: 'one',
+        name: 'NestedOne',
+        component: NestedOneView,
+      },
+      {
+        path: 'two',
+        name: 'NestedTwo',
+        component: NestedTwoView,
+      },
+    ],
+  },
 ];
 
 const router = createRouter({
