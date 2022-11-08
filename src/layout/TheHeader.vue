@@ -24,6 +24,9 @@
           <li class="nav-item">
             <RouterLink class="nav-link" to="/posts">게시글</RouterLink>
           </li>
+          <li class="nav-item">
+            <RouterLink class="nav-link" to="/nested">Nested</RouterLink>
+          </li>
         </ul>
         <div class="d-flex">
           <button class="btn btn-outline-light" type="button" @click="goWritePage">글쓰기</button>
