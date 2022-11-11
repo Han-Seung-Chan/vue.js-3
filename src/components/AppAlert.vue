@@ -1,30 +1,26 @@
 <template>
-  <div v-if="show" class="app-alert alert" :class="styleClass" role="alert">
-    {{ message }}
+  <div class="app-alert">
+    <TransitionGroup name="alert">
+      <div
+        v-for="({ message, type }, index) in items"
+        :key="index"
+        class="alert"
+        :class="styleClass(type)"
+        role="alert"
+      >
+        {{ message }}
+      </div>
+    </TransitionGroup>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
-const props = defineProps({
-  show: {
-    type: Boolean,
-    default: false,
-  },
-  message: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    default: 'error',
-    validator: (value) => ['success', 'error'].includes(value),
-  },
+defineProps({
+  items: Array,
 });
-const styleClass = computed(() =>
-  props.type === 'error' ? 'alert-danger' : 'alert-primary',
-);
+
+const styleClass = (type) =>
+  type === 'error' ? 'alert-danger' : 'alert-primary';
 </script>
 
 <style scoped>
@@ -32,5 +28,19 @@ const styleClass = computed(() =>
   position: fixed;
   top: 10px;
   right: 10px;
+}
+.alert-enter-from,
+.alert-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+.alert-enter-active,
+.alert-leave-active {
+  transition: all 0.5s ease;
+}
+.alert-enter-to,
+.alert-leave-from {
+  opacity: 1;
+  transform: translateY(0px);
 }
 </style>

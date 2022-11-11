@@ -18,7 +18,7 @@
         <button class="btn btn-primary">수정</button>
       </template>
     </PostForm>
-    <AppAlert :show="isShowAlert" :message="alertMessage" :type="alertType" />
+    <AppAlert :items="alerts" />
   </div>
 </template>
 
@@ -44,7 +44,7 @@ const form = ref({
     const { data } = await getPostsId(id);
     form.value = { ...data };
   } catch (err) {
-    console.error(err);
+    showAlert(err.message);
   }
 })();
 
@@ -56,19 +56,16 @@ const editForm = async () => {
     showAlert('수정이 완료되었습니다!!!', 'success');
     // router.push({ name: 'PostDetail', params: { id } });
   } catch (err) {
-    showAlert('네트워크 오류');
+    showAlert(err.message);
   }
 };
 
-const isShowAlert = ref(false);
-const alertMessage = ref('');
-const alertType = ref('');
+const alerts = ref([]);
 const showAlert = (message, type = 'error') => {
-  alertMessage.value = message;
-  alertType.value = type;
-  isShowAlert.value = true;
+  alerts.value.push({ message, type });
+
   setTimeout(() => {
-    isShowAlert.value = false;
+    alerts.value.shift();
   }, 1500);
 };
 </script>
