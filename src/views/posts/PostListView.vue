@@ -14,20 +14,30 @@
           :content="item.content"
           :create-at="item.createAt"
           @click="goDetailPage(item.id)"
+          @showModal="openModal(item)"
         />
       </template>
     </AppGrid>
 
     <AppPagiNation
-      :cur-page="params._page"
-      :page-count="pageCount"
+      :curPage="params._page"
+      :pageCount="pageCount"
       @page="(page) => (params._page = page)"
     />
+
+    <Teleport to="#modal">
+      <PostModal
+        v-model="showModal"
+        :title="modalTitle"
+        :content="modalContent"
+        :createAt="modalCreateAt"
+      />
+    </Teleport>
 
     <template v-if="posts && posts.length">
       <hr class="my-5" />
       <AppCard>
-        <PostDetailView :id="posts[0].id" />
+        <PostDetailView :id="`${posts[0].id}`" />
       </AppCard>
     </template>
   </div>
@@ -43,6 +53,7 @@ import { computed, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { getPosts } from '@/api/posts';
 import PostFilter from '@/components/posts/PostFilter.vue';
+import PostModal from '@/components/posts/PostModal.vue';
 
 const params = ref({
   _sort: 'createAt',
@@ -70,6 +81,18 @@ watchEffect(fetchPosts);
 
 const router = useRouter();
 const goDetailPage = (id) => router.push(`/posts/${id}`);
+
+const showModal = ref(false);
+const modalTitle = ref('');
+const modalContent = ref('');
+const modalCreateAt = ref('');
+
+const openModal = ({ title, content, createAt }) => {
+  showModal.value = true;
+  modalTitle.value = title;
+  modalContent.value = content;
+  modalCreateAt.value = createAt;
+};
 </script>
 
 <style lang="scss" scoped></style>
