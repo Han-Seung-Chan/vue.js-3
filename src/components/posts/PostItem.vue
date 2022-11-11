@@ -4,7 +4,14 @@
     <p class="card-text">
       {{ content }}
     </p>
-    <P class="text-muted">{{ createAt }}</P>
+    <p class="text-muted">{{ createAt }}</p>
+    <template #footer>
+      <div class="d-flex flex-row-reverse">
+        <button class="btn p-0" @click.stop="$emit('showModal')">
+          <i class="bi bi-card-text"></i>
+        </button>
+      </div>
+    </template>
   </AppCard>
 </template>
 
@@ -23,6 +30,7 @@ defineProps({
     type: [String, Date, Number],
   },
 });
+defineEmits(['showModal']);
 </script>
 
 <style lang="scss" scoped></style>
