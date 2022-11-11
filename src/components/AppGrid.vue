@@ -1,6 +1,6 @@
 <template>
   <div class="row g-3">
-    <div v-for="item in items" :key="item.id" :class="colClass">
+    <div v-for="(item, index) in items" :key="item.id" :class="colClass">
       <slot :item="item" :index="index"></slot>
     </div>
   </div>
