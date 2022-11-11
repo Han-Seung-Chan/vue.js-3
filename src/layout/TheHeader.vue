@@ -28,7 +28,13 @@
           </li>
         </ul>
         <div class="d-flex">
-          <button class="btn btn-outline-light" type="button" @click="goWritePage">글쓰기</button>
+          <button
+            class="btn btn-outline-light"
+            type="button"
+            @click="goWritePage"
+          >
+            글쓰기
+          </button>
         </div>
       </div>
     </div>

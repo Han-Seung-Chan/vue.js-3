@@ -10,4 +10,5 @@ export const getPosts = () => {
   return posts;
 };
 
-export const getPostsId = (id) => posts.find((item) => item.id === parseInt(id));
+export const getPostsId = (id) =>
+  posts.find((item) => item.id === parseInt(id));

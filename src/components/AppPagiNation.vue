@@ -2,7 +2,11 @@
   <nav class="mt-5">
     <ul class="pagination justify-content-center">
       <li class="page-item" :class="isPrevPage">
-        <a class="page-link" href="#" @click.prevent="$emit('page', curPage - 1)">
+        <a
+          class="page-link"
+          href="#"
+          @click.prevent="$emit('page', curPage - 1)"
+        >
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
@@ -12,10 +16,16 @@
         class="page-item"
         :class="{ active: curPage === page }"
       >
-        <a class="page-link" href="#" @click.prevent="$emit('page', page)">{{ page }}</a>
+        <a class="page-link" href="#" @click.prevent="$emit('page', page)">{{
+          page
+        }}</a>
       </li>
       <li class="page-item" :class="isNextPage">
-        <a class="page-link" href="#" @click.prevent="$emit('page', curPage + 1)">
+        <a
+          class="page-link"
+          href="#"
+          @click.prevent="$emit('page', curPage + 1)"
+        >
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
@@ -39,7 +49,9 @@ const props = defineProps({
 defineEmits(['page']);
 
 const isPrevPage = computed(() => ({ disabled: !(props.curPage > 1) }));
-const isNextPage = computed(() => ({ disabled: !(props.curPage < props.pageCount) }));
+const isNextPage = computed(() => ({
+  disabled: !(props.curPage < props.pageCount),
+}));
 </script>
 
 <style lang="scss" scoped></style>

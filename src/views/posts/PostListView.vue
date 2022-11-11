@@ -2,7 +2,10 @@
   <div>
     <h2>게시글 목록</h2>
     <hr class="my-4" />
-    <PostFilter v-model:title="params.title_like" v-model:limit="params._limit" />
+    <PostFilter
+      v-model:title="params.title_like"
+      v-model:limit="params._limit"
+    />
     <hr class="my-4" />
     <AppGrid :items="posts">
       <template v-slot="{ item }">
@@ -49,7 +52,9 @@ const params = ref({
   title_like: '',
 });
 const totalCount = ref(0);
-const pageCount = computed(() => Math.ceil(totalCount.value / params.value._limit));
+const pageCount = computed(() =>
+  Math.ceil(totalCount.value / params.value._limit),
+);
 
 const posts = ref([]);
 const fetchPosts = async () => {

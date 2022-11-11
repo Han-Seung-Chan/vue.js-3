@@ -2,9 +2,19 @@
   <div>
     <h2>게시글 수정</h2>
     <hr class="my-4" />
-    <PostForm @submit.prevent="editForm" v-model:title="form.title" v-model:content="form.content">
+    <PostForm
+      @submit.prevent="editForm"
+      v-model:title="form.title"
+      v-model:content="form.content"
+    >
       <template #actions>
-        <button type="button" class="btn btn-outline-danger" @click="goDetailPage">취소</button>
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          @click="goDetailPage"
+        >
+          취소
+        </button>
         <button class="btn btn-primary">수정</button>
       </template>
     </PostForm>

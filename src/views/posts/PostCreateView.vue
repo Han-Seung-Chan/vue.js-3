@@ -2,9 +2,15 @@
   <div>
     <h2>게시글 등록</h2>
     <hr class="my-4" />
-    <PostForm @submit.prevent="saveForm" v-model:title="form.title" v-model:content="form.content">
+    <PostForm
+      @submit.prevent="saveForm"
+      v-model:title="form.title"
+      v-model:content="form.content"
+    >
       <template #actions>
-        <button type="button" class="btn btn-outline-dark" @click="goListPage">목록</button>
+        <button type="button" class="btn btn-outline-dark" @click="goListPage">
+          목록
+        </button>
         <button class="btn btn-primary">저장</button>
       </template>
     </PostForm>

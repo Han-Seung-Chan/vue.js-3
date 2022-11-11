@@ -3,7 +3,11 @@ require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   root: true,
-  extends: ['plugin:vue/vue3-essential', 'eslint:recommended', '@vue/eslint-config-prettier'],
+  extends: [
+    'plugin:vue/vue3-essential',
+    'eslint:recommended',
+    '@vue/eslint-config-prettier',
+  ],
   env: {
     'vue/setup-compiler-macros': true,
   },
@@ -23,7 +27,7 @@ module.exports = {
         jsxSingleQuote: true,
         proseWrap: 'preserve',
         quoteProps: 'as-needed',
-        printWidth: 100,
+        printWidth: 80,
         semi: true,
         singleQuote: true,
         tabWidth: 2,
