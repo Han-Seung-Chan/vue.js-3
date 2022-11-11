@@ -2,67 +2,44 @@
   <div>
     <h2>게시글 목록</h2>
     <hr class="my-4" />
-    <form @submit.prevent>
-      <div class="row g-3">
-        <div class="col">
-          <input type="text" class="form-control" v-model="params.title_like" />
-        </div>
-        <div class="col-4">
-          <select class="form-select" v-model="params._limit">
-            <option value="3">3개씩 보기</option>
-            <option value="6">6개씩 보기</option>
-            <option value="9">9개씩 보기</option>
-          </select>
-        </div>
-      </div>
-    </form>
+    <PostFilter v-model:title="params.title_like" v-model:limit="params._limit" />
     <hr class="my-4" />
-    <div class="row g-3">
-      <div v-for="post in posts" :key="post.id" class="col-4">
+    <AppGrid :items="posts">
+      <template v-slot="{ item }">
         <PostItem
-          :title="post.title"
-          :content="post.content"
-          :create-at="post.createAt"
-          @click="goDetailPage(post.id)"
-        ></PostItem>
-      </div>
-    </div>
-    <nav class="mt-5">
-      <ul class="pagination justify-content-center">
-        <li class="page-item" :class="{ disabled: !(params._page > 1) }">
-          <a class="page-link" href="#" @click.prevent="--params._page">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li
-          v-for="page in pageCount"
-          :key="page"
-          class="page-item"
-          :class="{ active: params._page === page }"
-        >
-          <a class="page-link" href="#" @click.prevent="params._page = page">{{ page }}</a>
-        </li>
-        <li class="page-item" :class="{ disabled: !(params._page < pageCount) }">
-          <a class="page-link" href="#" @click.prevent="++params._page">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-    <hr class="my-5" />
-    <AppCard>
-      <PostDetailView :id="parseInt(1)" />
-    </AppCard>
+          :title="item.title"
+          :content="item.content"
+          :create-at="item.createAt"
+          @click="goDetailPage(item.id)"
+        />
+      </template>
+    </AppGrid>
+
+    <AppPagiNation
+      :cur-page="params._page"
+      :page-count="pageCount"
+      @page="(page) => (params._page = page)"
+    />
+
+    <template v-if="posts && posts.length">
+      <hr class="my-5" />
+      <AppCard>
+        <PostDetailView :id="posts[0].id" />
+      </AppCard>
+    </template>
   </div>
 </template>
 
 <script setup>
 import PostItem from '@/components/posts/PostItem.vue';
-import AppCard from '@/components/AppCard.vue';
 import PostDetailView from '@/views/posts/PostDetailView.vue';
+import AppCard from '@/components/AppCard.vue';
+import AppPagiNation from '@/components/AppPagiNation.vue';
+import AppGrid from '@/components/AppGrid.vue';
 import { computed, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { getPosts } from '@/api/posts';
+import PostFilter from '@/components/posts/PostFilter.vue';
 
 const params = ref({
   _sort: 'createAt',
