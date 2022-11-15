@@ -66,5 +66,3 @@ const router = useRouter();
 const goListPage = () => router.push({ name: 'PostList' });
 const goEditPage = () => router.push(`/posts/edit/${props.id}`);
 </script>
-
-<style lang="scss" scoped></style>

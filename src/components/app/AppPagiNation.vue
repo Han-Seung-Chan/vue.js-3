@@ -53,5 +53,3 @@ const isNextPage = computed(() => ({
   disabled: !(props.curPage < props.pageCount),
 }));
 </script>
-
-<style lang="scss" scoped></style>

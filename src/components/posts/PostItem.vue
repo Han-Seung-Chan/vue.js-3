@@ -30,5 +30,3 @@ defineProps({
 });
 defineEmits(['showModal']);
 </script>
-
-<style lang="scss" scoped></style>

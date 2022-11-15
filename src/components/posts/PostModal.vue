@@ -44,5 +44,3 @@ const showModal = computed({
 });
 const closeModal = () => (showModal.value = false);
 </script>
-
-<style lang="scss" scoped></style>

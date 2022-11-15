@@ -48,5 +48,3 @@ const saveForm = async () => {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>

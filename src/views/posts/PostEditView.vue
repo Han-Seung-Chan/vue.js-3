@@ -61,5 +61,3 @@ const editForm = async () => {
   }
 };
 </script>
-
-<style lang="scss" scoped></style>

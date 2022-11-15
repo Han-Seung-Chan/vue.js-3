@@ -10,5 +10,3 @@ import { inject } from 'vue';
 
 const person = inject('person');
 </script>
-
-<style lang="scss" scoped></style>

@@ -91,5 +91,3 @@ const openModal = ({ title, content, createAt }) => {
   modalCreateAt.value = createAt;
 };
 </script>
-
-<style lang="scss" scoped></style>
