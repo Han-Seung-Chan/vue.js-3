@@ -7,23 +7,29 @@
       v-model:limit="params._limit"
     />
     <hr class="my-4" />
-    <AppGrid :items="posts">
-      <template v-slot="{ item }">
-        <PostItem
-          :title="item.title"
-          :content="item.content"
-          :create-at="item.createAt"
-          @click="goDetailPage(item.id)"
-          @showModal="openModal(item)"
-        />
-      </template>
-    </AppGrid>
+    <AppLoading v-if="isLoading" />
 
-    <AppPagiNation
-      :curPage="params._page"
-      :pageCount="pageCount"
-      @page="(page) => (params._page = page)"
-    />
+    <AppError v-else-if="isError" :message="isError.message" />
+
+    <template v-else>
+      <AppGrid :items="posts">
+        <template v-slot="{ item }">
+          <PostItem
+            :title="item.title"
+            :content="item.content"
+            :create-at="item.createAt"
+            @click="goDetailPage(item.id)"
+            @showModal="openModal(item)"
+          />
+        </template>
+      </AppGrid>
+
+      <AppPagiNation
+        :curPage="params._page"
+        :pageCount="pageCount"
+        @page="(page) => (params._page = page)"
+      />
+    </template>
 
     <Teleport to="#modal">
       <PostModal
@@ -52,6 +58,9 @@ import PostItem from '@/components/posts/PostItem.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
 import PostModal from '@/components/posts/PostModal.vue';
 
+const isError = ref(null);
+const isLoading = ref(false);
+
 const params = ref({
   _sort: 'createAt',
   _order: 'desc',
@@ -67,11 +76,15 @@ const pageCount = computed(() =>
 const posts = ref([]);
 const fetchPosts = async () => {
   try {
+    isLoading.value = true;
     const { data, headers } = await getPosts(params.value);
     posts.value = data;
     totalCount.value = headers['x-total-count'];
   } catch (err) {
     console.error(err);
+    isError.value = err;
+  } finally {
+    isLoading.value = false;
   }
 };
 watchEffect(fetchPosts);

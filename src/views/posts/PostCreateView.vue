@@ -2,6 +2,8 @@
   <div>
     <h2>게시글 등록</h2>
     <hr class="my-4" />
+    <AppError v-if="isError" :message="isError.message" />
+
     <PostForm
       @submit.prevent="saveForm"
       v-model:title="form.title"
@@ -11,7 +13,18 @@
         <button type="button" class="btn btn-outline-dark" @click="goListPage">
           목록
         </button>
-        <button class="btn btn-primary">저장</button>
+
+        <button class="btn btn-primary" :disabled="isLoading">
+          <template v-if="isLoading">
+            <span
+              class="spinner-grow spinner-grow-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </template>
+          <template v-else>저장</template>
+        </button>
       </template>
     </PostForm>
   </div>
@@ -32,11 +45,15 @@ const form = ref({
   content: '',
 });
 
+const isLoading = ref(false);
+const isError = ref(null);
+
 const { showAlert, alertSuccess } = useAlert();
 
 const saveForm = async () => {
   const now = new Date();
   try {
+    isLoading.value = true;
     await createPost({
       ...form.value,
       createAt: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
@@ -45,6 +62,9 @@ const saveForm = async () => {
     alertSuccess('등록이 완료되었습니다!!!');
   } catch (err) {
     showAlert(err.message);
+    isError.value = err;
+  } finally {
+    isLoading.value = false;
   }
 };
 </script>
