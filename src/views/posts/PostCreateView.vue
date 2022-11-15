@@ -18,10 +18,11 @@
 </template>
 
 <script setup>
-import { createPost } from '@/api/posts';
-import PostForm from '@/components/posts/PostForm.vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { createPost } from '@/api/posts';
+import PostForm from '@/components/posts/PostForm.vue';
+import { useAlert } from '@/hooks/useAlert';
 
 const router = useRouter();
 const goListPage = () => router.push({ name: 'PostList' });
@@ -31,6 +32,8 @@ const form = ref({
   content: '',
 });
 
+const { showAlert, alertSuccess } = useAlert();
+
 const saveForm = async () => {
   const now = new Date();
   try {
@@ -39,8 +42,9 @@ const saveForm = async () => {
       createAt: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
     });
     router.push({ name: 'PostList' });
+    alertSuccess('등록이 완료되었습니다!!!');
   } catch (err) {
-    console.error(err);
+    showAlert(err.message);
   }
 };
 </script>
