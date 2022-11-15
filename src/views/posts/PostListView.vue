@@ -44,14 +44,11 @@
 </template>
 
 <script setup>
-import PostItem from '@/components/posts/PostItem.vue';
-import PostDetailView from '@/views/posts/PostDetailView.vue';
-import AppCard from '@/components/AppCard.vue';
-import AppPagiNation from '@/components/AppPagiNation.vue';
-import AppGrid from '@/components/AppGrid.vue';
 import { computed, ref, watchEffect } from 'vue';
 import { useRouter } from 'vue-router';
 import { getPosts } from '@/api/posts';
+import PostDetailView from '@/views/posts/PostDetailView.vue';
+import PostItem from '@/components/posts/PostItem.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
 import PostModal from '@/components/posts/PostModal.vue';
 

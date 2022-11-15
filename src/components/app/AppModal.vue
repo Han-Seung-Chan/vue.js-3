@@ -56,4 +56,7 @@ defineEmits(['closeModal', 'update:modelValue']);
 .v-leave-from {
   opacity: 1;
 }
+.modal-content {
+  margin-top: 170px;
+}
 </style>

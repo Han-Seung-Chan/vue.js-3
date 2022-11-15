@@ -8,6 +8,8 @@
         id="title"
         :value="title"
         @input="$emit('update:title', $event.target.value)"
+        v-focus
+        v-color="'blue'"
       />
     </div>
     <div class="mb-3">
