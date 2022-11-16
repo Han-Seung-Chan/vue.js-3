@@ -50,16 +50,13 @@
 </template>
 
 <script setup>
-import { computed, ref, watchEffect } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { getPosts } from '@/api/posts';
 import PostDetailView from '@/views/posts/PostDetailView.vue';
 import PostItem from '@/components/posts/PostItem.vue';
 import PostFilter from '@/components/posts/PostFilter.vue';
 import PostModal from '@/components/posts/PostModal.vue';
-
-const isError = ref(null);
-const isLoading = ref(false);
+import { useAxios } from '@/hooks/useAxios';
 
 const params = ref({
   _sort: 'createAt',
@@ -68,26 +65,19 @@ const params = ref({
   _limit: 3,
   title_like: '',
 });
-const totalCount = ref(0);
+const totalCount = computed(() => response.value.headers['x-total-count']);
 const pageCount = computed(() =>
   Math.ceil(totalCount.value / params.value._limit),
 );
 
-const posts = ref([]);
-const fetchPosts = async () => {
-  try {
-    isLoading.value = true;
-    const { data, headers } = await getPosts(params.value);
-    posts.value = data;
-    totalCount.value = headers['x-total-count'];
-  } catch (err) {
-    console.error(err);
-    isError.value = err;
-  } finally {
-    isLoading.value = false;
-  }
-};
-watchEffect(fetchPosts);
+const {
+  data: posts,
+  isLoading,
+  isError,
+  response,
+} = useAxios('/posts', {
+  params,
+});
 
 const router = useRouter();
 const goDetailPage = (id) => router.push(`/posts/${id}`);

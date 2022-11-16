@@ -8,5 +8,5 @@
 <script setup>
 import { inject } from 'vue';
 
-const person = inject('person');
+const $person = inject('person');
 </script>

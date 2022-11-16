@@ -33,9 +33,9 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { createPost } from '@/api/posts';
 import PostForm from '@/components/posts/PostForm.vue';
 import { useAlert } from '@/hooks/useAlert';
+import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
 const goListPage = () => router.push({ name: 'PostList' });
@@ -45,26 +45,52 @@ const form = ref({
   content: '',
 });
 
-const isLoading = ref(false);
-const isError = ref(null);
+// const isLoading = ref(false);
+// const isError = ref(null);
 
 const { showAlert, alertSuccess } = useAlert();
 
+// const saveForm = async () => {
+//   const now = new Date();
+//   try {
+//     isLoading.value = true;
+//     await createPost({
+//       ...form.value,
+//       createAt: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+//     });
+//     router.push({ name: 'PostList' });
+//     alertSuccess('등록이 완료되었습니다!!!');
+//   } catch (err) {
+//     showAlert(err.message);
+//     isError.value = err;
+//   } finally {
+//     isLoading.value = false;
+//   }
+// };
+
+const { isLoading, isError, execute } = useAxios(
+  '/posts',
+  {
+    method: 'post',
+  },
+  {
+    immediate: false,
+    onSuccess: () => {
+      router.push({ name: 'PostList' });
+      alertSuccess('등록이 완료되었습니다!!!');
+    },
+    onError: (err) => {
+      showAlert(err.message);
+      isError.value = err;
+    },
+  },
+);
+
 const saveForm = async () => {
   const now = new Date();
-  try {
-    isLoading.value = true;
-    await createPost({
-      ...form.value,
-      createAt: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
-    });
-    router.push({ name: 'PostList' });
-    alertSuccess('등록이 완료되었습니다!!!');
-  } catch (err) {
-    showAlert(err.message);
-    isError.value = err;
-  } finally {
-    isLoading.value = false;
-  }
+  execute({
+    ...form.value,
+    createAt: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
+  });
 };
 </script>

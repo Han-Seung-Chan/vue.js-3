@@ -1,7 +1,13 @@
 <template>
-  <div>
+  <AppLoading v-if="isLoading" />
+
+  <AppError v-else-if="isError" :message="isError.message" />
+
+  <div v-else>
     <h2>게시글 수정</h2>
     <hr class="my-4" />
+    <AppError v-if="isEditError" :message="isEditError.message" />
+
     <PostForm
       @submit.prevent="editForm"
       v-model:title="form.title"
@@ -15,18 +21,29 @@
         >
           취소
         </button>
-        <button class="btn btn-primary">수정</button>
+
+        <button class="btn btn-primary" :disabled="isEditLoading">
+          <template v-if="isEditLoading">
+            <span
+              class="spinner-grow spinner-grow-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </template>
+          <template v-else> 수정 </template>
+        </button>
       </template>
     </PostForm>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getPostsId, updatePost } from '@/api/posts';
 import PostForm from '@/components/posts/PostForm.vue';
 import { useAlert } from '@/hooks/useAlert';
+import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
 const route = useRoute();
@@ -35,29 +52,21 @@ const id = route.params.id;
 
 const { showAlert, alertSuccess } = useAlert();
 
-const form = ref({
-  title: '',
-  content: '',
-});
+const url = computed(() => `/posts/${id}`);
+const { data: form, isLoading, isError } = useAxios(url.value);
 
-(async () => {
-  try {
-    const { data } = await getPostsId(id);
-    form.value = { ...data };
-  } catch (err) {
-    showAlert(err.message);
-  }
-})();
-
-const editForm = async () => {
-  try {
-    await updatePost(id, {
-      ...form.value,
-    });
-    alertSuccess('수정이 완료되었습니다!!!');
-    router.push({ name: 'PostDetail', params: { id } });
-  } catch (err) {
-    showAlert(err.message);
-  }
-};
+const { isLoading: isEditLoading, isError: isEditError } = useAxios(
+  url.value,
+  { method: 'patch' },
+  {
+    immediate: false,
+    onSuccess: () => {
+      alertSuccess('수정이 완료되었습니다!!!');
+      router.push({ name: 'PostDetail', params: { id } });
+    },
+    onError: (err) => {
+      showAlert(err.message);
+    },
+  },
+);
 </script>

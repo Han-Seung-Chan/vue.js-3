@@ -1,9 +1,15 @@
 <template>
-  <div>
+  <AppLoading v-if="isLoading" />
+
+  <AppError v-else-if="isError" :message="isError.message" />
+
+  <div v-else>
     <h2>{{ post.title }}</h2>
     <p>{{ post.content }}</p>
     <p class="text-muted">{{ post.createAt }}</p>
     <hr class="my-4" />
+    <AppError v-if="isRemoveError" :message="isRemoveError.message" />
+
     <div class="row g-2">
       <div class="col-auto">
         <button class="btn btn-outline-dark">이전글</button>
@@ -21,35 +27,38 @@
         </button>
       </div>
       <div class="col-auto">
-        <button class="btn btn-outline-danger" @click="removePost">삭제</button>
+        <button
+          class="btn btn-outline-danger"
+          @click="removePost"
+          :disabled="isRemoveLoading"
+        >
+          <template v-if="isRemoveLoading">
+            <span
+              class="spinner-grow spinner-grow-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span class="visually-hidden">Loading...</span>
+          </template>
+          <template v-else> 삭제 </template>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { deletePost, getPostsId } from '@/api/posts';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { deletePost } from '@/api/posts';
+import { useAxios } from '@/hooks/useAxios';
 
 const props = defineProps({
   id: String,
 });
 
-const post = ref({
-  title: '',
-  content: '',
-  createAt: '',
-});
-
-(async () => {
-  try {
-    const { data } = await getPostsId(props.id);
-    post.value = { ...data };
-  } catch (err) {
-    console.error(err);
-  }
-})();
+const url = computed(() => `/posts/${props.id}`);
+const { data: post, isLoading, isError } = useAxios(url.value);
 
 const removePost = async () => {
   try {
@@ -61,6 +70,9 @@ const removePost = async () => {
     console.error(err);
   }
 };
+
+const isRemoveLoading = ref(false);
+const isRemoveError = ref(false);
 
 const router = useRouter();
 const goListPage = () => router.push({ name: 'PostList' });
