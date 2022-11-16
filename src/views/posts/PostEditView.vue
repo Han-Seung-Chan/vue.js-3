@@ -9,7 +9,7 @@
     <AppError v-if="isEditError" :message="isEditError.message" />
 
     <PostForm
-      @submit.prevent="editForm"
+      @submit.prevent="editHandler"
       v-model:title="form.title"
       v-model:content="form.content"
     >
@@ -47,7 +47,6 @@ import { useAxios } from '@/hooks/useAxios';
 
 const router = useRouter();
 const route = useRoute();
-const goDetailPage = () => router.go(-1);
 const id = route.params.id;
 
 const { showAlert, alertSuccess } = useAlert();
@@ -55,7 +54,11 @@ const { showAlert, alertSuccess } = useAlert();
 const url = computed(() => `/posts/${id}`);
 const { data: form, isLoading, isError } = useAxios(url.value);
 
-const { isLoading: isEditLoading, isError: isEditError } = useAxios(
+const {
+  isLoading: isEditLoading,
+  isError: isEditError,
+  execute,
+} = useAxios(
   url.value,
   { method: 'patch' },
   {
@@ -69,4 +72,12 @@ const { isLoading: isEditLoading, isError: isEditError } = useAxios(
     },
   },
 );
+
+const editHandler = () => {
+  execute({
+    ...form.value,
+  });
+};
+
+const goDetailPage = () => router.go(-1);
 </script>

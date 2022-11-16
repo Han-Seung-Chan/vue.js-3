@@ -6,50 +6,62 @@ axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
 const defaultConfig = {
   method: 'get',
 };
-const defaultOption = {
+
+const defaultOptions = {
   immediate: true,
 };
 
 export const useAxios = (url, config = {}, options = {}) => {
-  const data = ref(null);
-  const isLoading = ref(false);
-  const isError = ref(null);
   const response = ref(null);
+  const data = ref(null);
+  const isError = ref(null);
+  const isLoading = ref(false);
 
-  const { params } = config;
-  const { onSuccess, onError, immediate } = {
-    ...defaultConfig,
+  const { onSuccess, onisError, immediate } = {
+    ...defaultOptions,
     ...options,
   };
 
-  const execute = (bodyData) => {
+  const { params } = config;
+  const execute = (body) => {
     data.value = null;
     isError.value = null;
     isLoading.value = true;
-
     axios(url, {
-      ...defaultOption,
+      ...defaultConfig,
       ...config,
       params: unref(params),
-      data: typeof bodyData === 'object' ? bodyData : {},
+      data: typeof body === 'object' ? body : {},
     })
       .then((res) => {
         response.value = res;
         data.value = res.data;
-        if (onSuccess) onSuccess(res);
+        if (onSuccess) {
+          onSuccess(res);
+        }
       })
       .catch((err) => {
         isError.value = err;
-        if (onError) onError(err);
+        if (onisError) {
+          onisError(err);
+        }
       })
       .finally(() => {
         isLoading.value = false;
       });
   };
-
-  if (isRef(params)) watchEffect(execute);
-  else {
-    if (immediate) execute();
+  if (isRef(params)) {
+    watchEffect(execute);
+  } else {
+    if (immediate) {
+      execute();
+    }
   }
-  return { data, isLoading, isError, response, execute };
+  return {
+    response,
+    data,
+    isError,
+    isLoading,
+    execute,
+  };
 };

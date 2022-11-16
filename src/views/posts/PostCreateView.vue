@@ -45,28 +45,7 @@ const form = ref({
   content: '',
 });
 
-// const isLoading = ref(false);
-// const isError = ref(null);
-
 const { showAlert, alertSuccess } = useAlert();
-
-// const saveForm = async () => {
-//   const now = new Date();
-//   try {
-//     isLoading.value = true;
-//     await createPost({
-//       ...form.value,
-//       createAt: `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`,
-//     });
-//     router.push({ name: 'PostList' });
-//     alertSuccess('등록이 완료되었습니다!!!');
-//   } catch (err) {
-//     showAlert(err.message);
-//     isError.value = err;
-//   } finally {
-//     isLoading.value = false;
-//   }
-// };
 
 const { isLoading, isError, execute } = useAxios(
   '/posts',

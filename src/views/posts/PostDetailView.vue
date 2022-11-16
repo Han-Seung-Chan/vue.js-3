@@ -29,7 +29,7 @@
       <div class="col-auto">
         <button
           class="btn btn-outline-danger"
-          @click="removePost"
+          @click="removePostHandler"
           :disabled="isRemoveLoading"
         >
           <template v-if="isRemoveLoading">
@@ -48,31 +48,45 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { deletePost } from '@/api/posts';
 import { useAxios } from '@/hooks/useAxios';
+import { useAlert } from '@/hooks/useAlert';
 
 const props = defineProps({
   id: String,
 });
 
+const { showAlert, alertSuccess } = useAlert();
+
 const url = computed(() => `/posts/${props.id}`);
-const { data: post, isLoading, isError } = useAxios(url.value);
+const { isError, isLoading, data: post } = useAxios(url.value);
 
-const removePost = async () => {
-  try {
-    if (!confirm('삭제 하시겠습니까?')) return;
+const {
+  error: isRemoveError,
+  loading: isRemoveLoading,
+  execute,
+} = useAxios(
+  url.value,
+  { method: 'delete' },
+  {
+    immediate: false,
+    onSuccess: () => {
+      alertSuccess('삭제가 완료되었습니다.');
+      router.push({ name: 'PostList' });
+    },
+    onError: (err) => {
+      showAlert(err.message);
+    },
+  },
+);
 
-    await deletePost(props.id);
-    goListPage();
-  } catch (err) {
-    console.error(err);
+const removePostHandler = async () => {
+  if (confirm('삭제 하시겠습니까?') === false) {
+    return;
   }
+  execute();
 };
-
-const isRemoveLoading = ref(false);
-const isRemoveError = ref(false);
 
 const router = useRouter();
 const goListPage = () => router.push({ name: 'PostList' });
