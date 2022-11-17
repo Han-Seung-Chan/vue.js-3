@@ -1,7 +1,8 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Khan</a>
+      <RouterLink class="navbar-brand" to="/">Khan</RouterLink>
+
       <button
         class="navbar-toggler"
         type="button"
