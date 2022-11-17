@@ -21,10 +21,13 @@
             <RouterLink class="nav-link" to="/about">About</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/posts">게시글</RouterLink>
+            <RouterLink class="nav-link" to="/nested">Nested</RouterLink>
           </li>
           <li class="nav-item">
-            <RouterLink class="nav-link" to="/nested">Nested</RouterLink>
+            <RouterLink class="nav-link" to="/posts">Posts</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink class="nav-link" to="/my">MyPage</RouterLink>
           </li>
         </ul>
         <div class="d-flex">
