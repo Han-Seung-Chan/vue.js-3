@@ -20,9 +20,10 @@
           <PostItem
             :title="item.title"
             :content="item.content"
-            :created-at="item.createdAt"
+            :createAt="item.createAt"
             @click="goDetailPage(item.id)"
             @modal="openModal(item)"
+            @preview="changePreviewId(item.id)"
           ></PostItem>
         </template>
       </AppGrid>
@@ -38,14 +39,14 @@
         v-model="show"
         :title="modalTitle"
         :content="modalContent"
-        :created-at="modalCreatedAt"
+        :createAt="modalCreateAt"
       />
     </Teleport>
 
-    <template v-if="posts && posts.length > 0">
+    <template v-if="previewId">
       <hr class="my-5" />
       <AppCard>
-        <PostDetailView :id="`${posts[0].id}`"></PostDetailView>
+        <PostDetailView :id="`${previewId}`"></PostDetailView>
       </AppCard>
     </template>
   </div>
@@ -62,7 +63,7 @@ import PostModal from '@/components/posts/PostModal.vue';
 
 const router = useRouter();
 const params = ref({
-  _sort: 'createdAt',
+  _sort: 'createAt',
   _order: 'desc',
   _page: 1,
   _limit: 3,
@@ -85,11 +86,15 @@ const goDetailPage = (id) => router.push(`/posts/${id}`);
 const show = ref(false);
 const modalTitle = ref('');
 const modalContent = ref('');
-const modalCreatedAt = ref('');
-const openModal = ({ title, content, createdAt }) => {
+const modalCreateAt = ref('');
+const openModal = ({ title, content, createAt }) => {
+  console.log(createAt);
   show.value = true;
   modalTitle.value = title;
   modalContent.value = content;
-  modalCreatedAt.value = createdAt;
+  modalCreateAt.value = createAt;
 };
+
+const previewId = ref(null);
+const changePreviewId = (id) => (previewId.value = id);
 </script>

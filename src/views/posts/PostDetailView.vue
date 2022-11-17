@@ -5,6 +5,7 @@
 
   <div v-else>
     <h2>{{ post.title }}</h2>
+    <p>id : {{ id }} / 짝수 : {{ isOdd }} / 홀수 : {{ !isOdd }}</p>
     <p>{{ post.content }}</p>
     <p class="text-muted">{{ post.createAt }}</p>
     <hr class="my-4" />
@@ -48,10 +49,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, toRef } from 'vue';
 import { useRouter } from 'vue-router';
 import { useAxios } from '@/hooks/useAxios';
 import { useAlert } from '@/hooks/useAlert';
+import { useSniffling } from '@/hooks/useSniffling';
 
 const props = defineProps({
   id: String,
@@ -60,7 +62,7 @@ const props = defineProps({
 const { showAlert, alertSuccess } = useAlert();
 
 const url = computed(() => `/posts/${props.id}`);
-const { isError, isLoading, data: post } = useAxios(url.value);
+const { isError, isLoading, data: post } = useAxios(url);
 
 const {
   error: isRemoveError,
@@ -87,6 +89,9 @@ const removePostHandler = async () => {
   }
   execute();
 };
+
+const idRef = toRef(props, 'id');
+const { isOdd } = useSniffling(idRef);
 
 const router = useRouter();
 const goListPage = () => router.push({ name: 'PostList' });
