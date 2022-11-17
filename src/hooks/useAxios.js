@@ -17,7 +17,7 @@ export const useAxios = (url, config = {}, options = {}) => {
   const isError = ref(null);
   const isLoading = ref(false);
 
-  const { onSuccess, onisError, immediate } = {
+  const { onSuccess, onError, immediate } = {
     ...defaultOptions,
     ...options,
   };
@@ -27,7 +27,7 @@ export const useAxios = (url, config = {}, options = {}) => {
     data.value = null;
     isError.value = null;
     isLoading.value = true;
-    axios(url, {
+    axios(unref(url), {
       ...defaultConfig,
       ...config,
       params: unref(params),
@@ -42,15 +42,15 @@ export const useAxios = (url, config = {}, options = {}) => {
       })
       .catch((err) => {
         isError.value = err;
-        if (onisError) {
-          onisError(err);
+        if (onError) {
+          onError(err);
         }
       })
       .finally(() => {
         isLoading.value = false;
       });
   };
-  if (isRef(params)) {
+  if (isRef(params) || isRef(url)) {
     watchEffect(execute);
   } else {
     if (immediate) {
