@@ -1,7 +1,7 @@
 <template>
   <AppCard>
-    <h5 class="card-title">{{ title }}</h5>
-    <p class="card-text m-lg-1">
+    <h5 class="card-title text-truncate">{{ title }}</h5>
+    <p class="card-text m-lg-1 text-truncate">
       {{ content }}
     </p>
     <p class="text-muted m-0">{{ createAt }}</p>
